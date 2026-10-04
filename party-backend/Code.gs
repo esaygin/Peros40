@@ -54,7 +54,7 @@ function saveRsvp_(d) {
   var yes = d.attending === 'Yes';
   var adults = yes ? num_(d.adults) : 0;
   var kids = yes ? num_(d.kids) : 0;
-  var nights = yes ? Math.min(num_(d.nights), 2) : 0;
+  var nights = yes ? nights_(d.nights) : '';
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = sheet_(ss, 'RSVPs', RSVP_HEADERS);
   var row = [new Date(), safe_(name), d.attending, adults, kids, adults + kids,
@@ -78,7 +78,7 @@ function saveRsvp_(d) {
     var subject = 'Peros 40th RSVP: ' + name + ' - ' + (yes ? 'coming' : 'not coming');
     var body = yes
       ? adults + ' adults, ' + kids + ' kids' + (row[6] ? ' (ages ' + clean_(d.kidsAges) + ')' : '') +
-        '\nHotel: ' + (nights ? nights + ' night(s)' : 'not staying') +
+        '\nHotel nights: ' + (nights || 'not staying') +
         (row[9] ? '\nKita: ' + row[9] : '')
       : 'Not coming';
     if (d.phone) body += '\nMobile: ' + clean_(d.phone);
@@ -105,15 +105,17 @@ function updateSummary_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var rows = sheet_(ss, 'RSVPs', RSVP_HEADERS).getDataRange().getValues().slice(1);
   var t = { replied: rows.length, coming: 0, declined: 0, adults: 0, kids: 0,
-    one: 0, onePeople: 0, two: 0, twoPeople: 0, dinnerOnly: 0,
+    fri: 0, friPeople: 0, sat: 0, satPeople: 0, sun: 0, sunPeople: 0, dinnerOnly: 0,
     kitaHalf: 0, kitaHalfKids: 0, kitaFull: 0, kitaFullKids: 0, kitaMaybe: 0, kitaMaybeKids: 0 };
   rows.forEach(function (r) {
     if (r[2] === 'Yes') {
       var people = (+r[3] || 0) + (+r[4] || 0);
       t.coming++; t.adults += +r[3] || 0; t.kids += +r[4] || 0;
-      if (+r[7] === 1) { t.one++; t.onePeople += people; }
-      else if (+r[7] === 2) { t.two++; t.twoPeople += people; }
-      else t.dinnerOnly++;
+      var stay = String(r[7]);
+      if (/Fri/.test(stay)) { t.fri++; t.friPeople += people; }
+      if (/Sat/.test(stay)) { t.sat++; t.satPeople += people; }
+      if (/Sun/.test(stay)) { t.sun++; t.sunPeople += people; }
+      if (!/Fri|Sat|Sun/.test(stay)) t.dinnerOnly++;
       var k = +r[4] || 0;
       if (r[9] === 'Half day') { t.kitaHalf++; t.kitaHalfKids += k; }
       else if (r[9] === 'Full day') { t.kitaFull++; t.kitaFullKids += k; }
@@ -132,13 +134,18 @@ function updateSummary_() {
     ['Kids coming', t.kids],
     ['Total people', t.adults + t.kids],
     ['', ''],
-    ['Families staying 1 night', t.one],
-    ['  People staying 1 night', t.onePeople],
-    ['Families staying 2 nights', t.two],
-    ['  People staying 2 nights', t.twoPeople],
+    ['Hotel: Friday 11 Dec', ''],
+    ['  Families', t.fri],
+    ['  People', t.friPeople],
+    ['Hotel: Saturday 12 Dec', ''],
+    ['  Families', t.sat],
+    ['  People', t.satPeople],
+    ['Hotel: Sunday 13 Dec', ''],
+    ['  Families', t.sun],
+    ['  People', t.sunPeople],
     ['Families coming for dinner only', t.dinnerOnly],
     ['', ''],
-    ['Kita on Saturday (for the hotel)', ''],
+    ['Kita interest (for the hotel)', ''],
     ['  Half day: families', t.kitaHalf],
     ['  Half day: kids', t.kitaHalfKids],
     ['  Full day: families', t.kitaFull],
@@ -174,6 +181,11 @@ function sheet_(ss, name, headers) {
 }
 
 function nameKey_(v) { return String(v).replace(/^'/, '').toLowerCase().replace(/[^a-z0-9\u00c0-\u024f]+/g, ' ').trim(); }
+// Turns ["Fri","Sat"] into "Fri, Sat", keeping only the party weekend's nights.
+function nights_(v) {
+  var list = Array.isArray(v) ? v : [];
+  return ['Fri', 'Sat', 'Sun'].filter(function (n) { return list.indexOf(n) >= 0; }).join(', ');
+}
 function kita_(v) { return ['No', 'Maybe', 'Half day', 'Full day'].indexOf(v) >= 0 ? v : ''; }
 function clean_(v) { return String(v == null ? '' : v).trim().slice(0, 5000); }
 // Stops text starting with = + - @ from being treated as a spreadsheet formula.

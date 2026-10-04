@@ -416,7 +416,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
           <div>
             <p class="label">Kita · hotel daycare</p>
             <h3>Childcare by the hotel's own team</h3>
-            <p class="muted">The hotel's accredited mountain daycare, with indoor and outdoor activities. Open Monday to Saturday, 08:00–18:00, so on the party weekend it runs on Saturday during the day.</p>
+            <p class="muted">The hotel's accredited mountain daycare, with indoor and outdoor activities. Open Monday to Saturday, 08:00–18:00, so on the party weekend it runs on Friday and Saturday during the day.</p>
           </div>
           <dl class="rates">
             <div><dt>Half day, up to 4 hours</dt><dd>CHF 30</dd></div>
@@ -490,7 +490,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
 
               <fieldset id="kitaField" hidden>
                 <legend>Interested in the hotel Kita?</legend>
-                <p class="hint">Daycare on Saturday, 08:00–18:00. <a href="#kids">Rates and details</a></p>
+                <p class="hint">Daycare on Friday and Saturday, 08:00–18:00. <a href="#kids">Rates and details</a></p>
                 <div class="choices four">
                   <label class="choice"><input type="radio" name="kita" value="No" id="kitaNo"><span>No, thanks</span></label>
                   <label class="choice"><input type="radio" name="kita" value="Maybe" id="kitaMaybe"><span>Maybe</span></label>
@@ -500,11 +500,13 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
               </fieldset>
 
               <fieldset>
-                <legend>Staying at Stoos Lodge?</legend>
-                <div class="choices three">
-                  <label class="choice"><input type="radio" name="nights" value="0" id="n0"><span>No, just the dinner</span></label>
-                  <label class="choice"><input type="radio" name="nights" value="1" id="n1"><span>Yes, 1 night</span></label>
-                  <label class="choice"><input type="radio" name="nights" value="2" id="n2"><span>Yes, 2 nights</span></label>
+                <legend>Which nights are you staying at Stoos Lodge?</legend>
+                <p class="hint">Tick every night you're staying.</p>
+                <div class="choices four">
+                  <label class="choice"><input type="checkbox" name="nights" value="Fri" id="nFri"><span>Friday 11 Dec</span></label>
+                  <label class="choice"><input type="checkbox" name="nights" value="Sat" id="nSat"><span>Saturday 12 Dec</span></label>
+                  <label class="choice"><input type="checkbox" name="nights" value="Sun" id="nSun"><span>Sunday 13 Dec</span></label>
+                  <label class="choice"><input type="checkbox" name="nights" value="None" id="nNone"><span>Not staying, just the dinner</span></label>
                 </div>
               </fieldset>
             </div>
@@ -677,6 +679,13 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
   renderCounts();
 
   function syncVisibility() { $("comingFields").hidden = !$("attYes").checked; }
+  form.querySelectorAll('input[name="nights"]').forEach(function (c) {
+    c.addEventListener("change", function () {
+      if (!c.checked) return;
+      if (c.value === "None") form.querySelectorAll('input[name="nights"]').forEach(function (o) { if (o !== c) o.checked = false; });
+      else $("nNone").checked = false;
+    });
+  });
   form.addEventListener("change", syncVisibility);
 
   function setStatus(el, text, kind) { el.textContent = text; el.className = "status" + (kind ? " " + kind : ""); }
@@ -688,8 +697,11 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
     if (r.attending === "Yes") {
       $("thanksTitle").textContent = "We can't wait to see you";
       var who = plural(r.adults, "adult", "adults") + (r.kids > 0 ? " and " + plural(r.kids, "kid", "kids") : "");
-      var stay = r.nights > 0
-        ? " Staying " + plural(r.nights, "night", "nights") + " at Stoos Lodge: remember the code PEROS40 when you book."
+      var names = { Fri: "Friday", Sat: "Saturday", Sun: "Sunday" };
+      var list = (r.nights || []).map(function (n) { return names[n]; });
+      var stay = list.length
+        ? " Staying " + (list.length > 1 ? list.slice(0, -1).join(", ") + " and " + list[list.length - 1] : list[0]) +
+          (list.length === 1 ? " night" : " nights") + " at Stoos Lodge: remember the code PEROS40 when you book."
         : "";
       var kita = r.kita === "Half day" || r.kita === "Full day" ? " We've noted your interest in the Kita (" + r.kita.toLowerCase() + ")." : "";
       $("thanksText").textContent = "We've noted " + who + "." + stay + kita + " And not a word to Peros.";
@@ -707,7 +719,10 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
     $("attYes").checked = last.attending === "Yes"; $("attNo").checked = last.attending === "No";
     if (last.attending === "Yes") {
       counts.adults = last.adults; counts.kids = last.kids;
-      var n = $("n" + last.nights); if (n) n.checked = true;
+      if (Array.isArray(last.nights)) {
+        $("nNone").checked = last.nights.length === 0;
+        last.nights.forEach(function (v) { var n = $("n" + v); if (n) n.checked = true; });
+      }
       form.querySelectorAll('input[name="kita"]').forEach(function (k) { k.checked = k.value === last.kita; });
     }
     renderCounts(); syncVisibility(); showThanks(last);
@@ -721,11 +736,12 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var st = $("rsvpStatus"), f = form.elements;
-    var att = f.attending.value, nights = f.nights.value;
+    var att = f.attending.value;
+    var nights = Array.prototype.map.call(form.querySelectorAll('input[name="nights"]:checked'), function (c) { return c.value; });
     var missing = [];
     if (!f.name.value.trim()) missing.push("your name");
     if (!att) missing.push("whether you can come");
-    else if (att === "Yes" && nights === "") missing.push("whether you're staying at the hotel");
+    else if (att === "Yes" && !nights.length) missing.push("which nights you're staying (or that you're not staying)");
     if (missing.length) { setStatus(st, "Please add " + missing.join(" and ") + ".", "err"); return; }
 
     var yes = att === "Yes";
@@ -735,7 +751,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
       adults: yes ? counts.adults : 0,
       kids: yes ? counts.kids : 0,
       kidsAges: yes && counts.kids > 0 ? f.kidsAges.value.trim() : "",
-      nights: yes ? Number(nights) : 0,
+      nights: yes ? nights.filter(function (n) { return n !== "None"; }) : [],
       kita: yes && counts.kids > 0 ? f.kita.value : "",
       phone: f.phone.value.trim()
     };
