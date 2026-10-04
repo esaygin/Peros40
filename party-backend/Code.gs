@@ -10,7 +10,7 @@ var PHOTO_FOLDER_ID = '';
 // Optional: an email address to notify on each new RSVP. Leave empty for no emails.
 var NOTIFY_EMAIL = '';
 
-var RSVP_HEADERS = ['Updated', 'Name', 'Coming', 'Adults', 'Kids', 'Total people', 'Kids ages', 'Hotel nights', 'Mobile'];
+var RSVP_HEADERS = ['Updated', 'Name', 'Coming', 'Adults', 'Kids', 'Total people', 'Kids ages', 'Hotel nights', 'Mobile', 'Kita'];
 var PHOTO_HEADERS = ['Received', 'From', 'File', 'Note', 'Link'];
 
 /** Run once from the Apps Script editor to create the tabs and the photo folder. */
@@ -58,7 +58,7 @@ function saveRsvp_(d) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = sheet_(ss, 'RSVPs', RSVP_HEADERS);
   var row = [new Date(), safe_(name), d.attending, adults, kids, adults + kids,
-    yes && kids ? safe_(d.kidsAges) : '', nights, safe_(d.phone)];
+    yes && kids ? safe_(d.kidsAges) : '', nights, safe_(d.phone), yes && kids ? kita_(d.kita) : ''];
 
   // One row per family: replying again with the same name replaces the earlier answer.
   var key = nameKey_(name);
@@ -78,7 +78,8 @@ function saveRsvp_(d) {
     var subject = 'Peros 40th RSVP: ' + name + ' - ' + (yes ? 'coming' : 'not coming');
     var body = yes
       ? adults + ' adults, ' + kids + ' kids' + (row[6] ? ' (ages ' + clean_(d.kidsAges) + ')' : '') +
-        '\nHotel: ' + (nights ? nights + ' night(s)' : 'not staying')
+        '\nHotel: ' + (nights ? nights + ' night(s)' : 'not staying') +
+        (row[9] ? '\nKita: ' + row[9] : '')
       : 'Not coming';
     if (d.phone) body += '\nMobile: ' + clean_(d.phone);
     MailApp.sendEmail(NOTIFY_EMAIL, subject, body);
@@ -104,7 +105,8 @@ function updateSummary_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var rows = sheet_(ss, 'RSVPs', RSVP_HEADERS).getDataRange().getValues().slice(1);
   var t = { replied: rows.length, coming: 0, declined: 0, adults: 0, kids: 0,
-    one: 0, onePeople: 0, two: 0, twoPeople: 0, dinnerOnly: 0 };
+    one: 0, onePeople: 0, two: 0, twoPeople: 0, dinnerOnly: 0,
+    kitaHalf: 0, kitaHalfKids: 0, kitaFull: 0, kitaFullKids: 0, kitaMaybe: 0, kitaMaybeKids: 0 };
   rows.forEach(function (r) {
     if (r[2] === 'Yes') {
       var people = (+r[3] || 0) + (+r[4] || 0);
@@ -112,6 +114,10 @@ function updateSummary_() {
       if (+r[7] === 1) { t.one++; t.onePeople += people; }
       else if (+r[7] === 2) { t.two++; t.twoPeople += people; }
       else t.dinnerOnly++;
+      var k = +r[4] || 0;
+      if (r[9] === 'Half day') { t.kitaHalf++; t.kitaHalfKids += k; }
+      else if (r[9] === 'Full day') { t.kitaFull++; t.kitaFullKids += k; }
+      else if (r[9] === 'Maybe') { t.kitaMaybe++; t.kitaMaybeKids += k; }
     } else if (r[2] === 'No') t.declined++;
   });
   var out = [
@@ -130,7 +136,15 @@ function updateSummary_() {
     ['  People staying 1 night', t.onePeople],
     ['Families staying 2 nights', t.two],
     ['  People staying 2 nights', t.twoPeople],
-    ['Families coming for dinner only', t.dinnerOnly]
+    ['Families coming for dinner only', t.dinnerOnly],
+    ['', ''],
+    ['Kita on Saturday (for the hotel)', ''],
+    ['  Half day: families', t.kitaHalf],
+    ['  Half day: kids', t.kitaHalfKids],
+    ['  Full day: families', t.kitaFull],
+    ['  Full day: kids', t.kitaFullKids],
+    ['  Maybe: families', t.kitaMaybe],
+    ['  Maybe: kids', t.kitaMaybeKids]
   ];
   var sh = sheet_(ss, 'Summary', []);
   sh.clearContents();
@@ -153,11 +167,14 @@ function sheet_(ss, name, headers) {
       sh.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold');
       sh.setFrozenRows(1);
     }
+  } else if (headers.length && sh.getLastColumn() < headers.length) {
+    sh.getRange(1, 1, 1, headers.length).setValues([headers]).setFontWeight('bold');
   }
   return sh;
 }
 
 function nameKey_(v) { return String(v).replace(/^'/, '').toLowerCase().replace(/[^a-z0-9\u00c0-\u024f]+/g, ' ').trim(); }
+function kita_(v) { return ['No', 'Maybe', 'Half day', 'Full day'].indexOf(v) >= 0 ? v : ''; }
 function clean_(v) { return String(v == null ? '' : v).trim().slice(0, 5000); }
 // Stops text starting with = + - @ from being treated as a spreadsheet formula.
 function safe_(v) { var s = clean_(v); return /^[=+\-@]/.test(s) ? "'" + s : s; }

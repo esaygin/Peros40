@@ -24,7 +24,8 @@ After any later change to `Code.gs`, use **Deploy → Manage deployments → Edi
 so the same URL keeps working.
 
 **Where to see responses:** the *Summary* tab shows the totals: families coming, adults,
-kids, total people, and who is staying 1 night, 2 nights or coming for dinner only.
+kids, total people, who is staying 1 night, 2 nights or coming for dinner only, and how
+many families and kids are interested in the Kita (half day, full day, maybe).
 The *RSVPs* tab has one row per family. If a family replies again under the same name,
 their row is updated rather than duplicated.
 Photos land in the Drive folder, named after the person who shared them.

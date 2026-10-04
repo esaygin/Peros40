@@ -239,6 +239,13 @@ fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; min-width
 .features { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 32px; }
 .features li { padding-block: 18px; border-top: 1px solid var(--line); display: grid; gap: 4px; align-content: start; }
 .features h3 { font-size: 1.45rem; }
+.kita { display: grid; gap: 18px; padding: 24px clamp(18px, 4vw, 28px); background: var(--surface); border: 1px solid var(--line); max-width: 640px; }
+.kita h3 { font-size: 1.6rem; margin-top: 6px; margin-bottom: 6px; }
+.rates { margin: 0; display: grid; border-top: 1px solid var(--line); }
+.rates div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.rates dt { color: var(--ink); }
+.rates dd { margin: 0; font-family: var(--display); font-size: 1.4rem; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.choices.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .features p { color: var(--muted); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 .status { min-height: 1.6em; font-size: 0.95rem; }
@@ -331,7 +338,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
         <h2>Dinner in the mountains</h2>
       </div>
       <div class="body">
-        <p class="prose">We're gathering at Stoos Lodge, a car-free mountain village above Lake Lucerne. The heart of the weekend is a birthday dinner on Saturday evening. More of the programme will follow, and we'll update this page as plans come together.</p>
+        <p class="prose">We're gathering at Stoos Lodge, a car-free mountain village above Lake Lucerne. The heart of the weekend is a birthday dinner on Saturday evening, followed by karaoke in the bunker. More of the programme will follow, and we'll update this page as plans come together.</p>
         <ol class="schedule">
           <li>
             <div class="when">Sat 12 Dec<span>Afternoon</span></div>
@@ -340,6 +347,10 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
           <li>
             <div class="when">Sat 12 Dec<span>Evening</span></div>
             <div><h3>Birthday dinner <span class="tbd">Time to follow</span></h3><p>Dinner for Peros at Stoos Lodge. We'll share the exact time and the arrival plan for the surprise closer to the date.</p></div>
+          </li>
+          <li>
+            <div class="when">Sat 12 Dec<span>After dinner</span></div>
+            <div><h3>Karaoke in the bunker</h3><p>The party moves down to the hotel's bunker for a karaoke night. Warm up your voice and pick your song.</p></div>
           </li>
           <li>
             <div class="when">Sun 13 Dec<span>All day</span></div>
@@ -390,16 +401,28 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
         <h2>A hotel made for families</h2>
       </div>
       <div class="body">
-        <p class="prose">Stoos Lodge is a family hotel, so the kids will have as much fun as we do. While the grown-ups enjoy dinner, the play area is right next to the restaurant.</p>
+        <p class="prose">Stoos Lodge is a family hotel, so the kids will have as much fun as we do. The play area is right next to the restaurant.</p>
         <ul class="features">
-          <li><h3>Indoor fun park</h3><p>200 m² of play space with a climbing wall, a trampoline and a ball pit.</p></li>
+          <li><h3>Indoor fun park</h3><p>200 m² of play space with a climbing wall, a trampoline and a ball pit. Free for hotel guests during their stay. It isn't supervised, so parents keep an eye on their kids.</p></li>
           <li><h3>The big slide</h3><p>An eight-metre slide goes straight from the restaurant down into the play area.</p></li>
-          <li><h3>Kids' club</h3><p>An accredited mountain daycare with indoor and outdoor activities, run by the hotel's own team.</p></li>
           <li><h3>Family rooms</h3><p>16 family rooms with connecting doors, so everyone has space.</p></li>
           <li><h3>For the little ones</h3><p>Babies up to 2 stay free with a cot, and breakfast is free for kids up to 6.</p></li>
           <li><h3>Car-free village</h3><p>No traffic in Stoos, and snow right outside the door in December.</p></li>
         </ul>
-        <p class="muted">Details are from the hotel's family page. Please check prices and kids' club times when you book.</p>
+        <div class="kita">
+          <div>
+            <p class="label">Kita · hotel daycare</p>
+            <h3>Childcare by the hotel's own team</h3>
+            <p class="muted">The hotel's accredited mountain daycare, with indoor and outdoor activities. Open Monday to Saturday, 08:00–18:00, so on the party weekend it runs on Saturday during the day.</p>
+          </div>
+          <dl class="rates">
+            <div><dt>Half day, up to 4 hours</dt><dd>CHF 30</dd></div>
+            <div><dt>Full day, more than 4 hours</dt><dd>CHF 60</dd></div>
+            <div><dt>Lunch</dt><dd>CHF 10</dd></div>
+          </dl>
+          <p class="muted">The hotel asks for registration in advance so it can plan staff. Tell us in the RSVP form if you're interested and we'll pass the numbers on.</p>
+        </div>
+        <p class="muted">Rates for hotel guests, as quoted by the hotel. Other details are from the hotel's family page.</p>
         <div class="links">
           <a class="btn ghost" href="https://stoos-lodge.ch/en/families/" target="_blank" rel="noopener">Family info at Stoos Lodge</a>
         </div>
@@ -461,6 +484,17 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
                 <label for="kidsAges">Kids' ages (optional)</label>
                 <input id="kidsAges" name="kidsAges" type="text" placeholder="e.g. 2, 5 and 8">
               </div>
+
+              <fieldset id="kitaField" hidden>
+                <legend>Interested in the hotel Kita?</legend>
+                <p class="hint">Daycare on Saturday, 08:00–18:00. <a href="#kids">Rates and details</a></p>
+                <div class="choices four">
+                  <label class="choice"><input type="radio" name="kita" value="No" id="kitaNo"><span>No, thanks</span></label>
+                  <label class="choice"><input type="radio" name="kita" value="Maybe" id="kitaMaybe"><span>Maybe</span></label>
+                  <label class="choice"><input type="radio" name="kita" value="Half day" id="kitaHalf"><span>Yes, half day</span></label>
+                  <label class="choice"><input type="radio" name="kita" value="Full day" id="kitaFull"><span>Yes, full day</span></label>
+                </div>
+              </fieldset>
 
               <fieldset>
                 <legend>Staying at Stoos Lodge?</legend>
@@ -628,6 +662,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
     var total = counts.adults + counts.kids;
     $("totalLine").textContent = total + (total === 1 ? " person" : " people") + " in total";
     $("kidsAgesField").hidden = counts.kids === 0;
+    $("kitaField").hidden = counts.kids === 0;
   }
   form.querySelectorAll(".step button").forEach(function (b) {
     b.addEventListener("click", function () {
@@ -653,7 +688,8 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
       var stay = r.nights > 0
         ? " Staying " + plural(r.nights, "night", "nights") + " at Stoos Lodge: remember the code PEROS40 when you book."
         : "";
-      $("thanksText").textContent = "We've noted " + who + "." + stay + " And not a word to Peros.";
+      var kita = r.kita === "Half day" || r.kita === "Full day" ? " We've noted your interest in the Kita (" + r.kita.toLowerCase() + ")." : "";
+      $("thanksText").textContent = "We've noted " + who + "." + stay + kita + " And not a word to Peros.";
     } else {
       $("thanksTitle").textContent = "We'll miss you";
       $("thanksText").textContent = "Thank you for letting us know. You can still share photos for the album below.";
@@ -669,6 +705,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
     if (last.attending === "Yes") {
       counts.adults = last.adults; counts.kids = last.kids;
       var n = $("n" + last.nights); if (n) n.checked = true;
+      form.querySelectorAll('input[name="kita"]').forEach(function (k) { k.checked = k.value === last.kita; });
     }
     renderCounts(); syncVisibility(); showThanks(last);
   }
@@ -696,6 +733,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
       kids: yes ? counts.kids : 0,
       kidsAges: yes && counts.kids > 0 ? f.kidsAges.value.trim() : "",
       nights: yes ? Number(nights) : 0,
+      kita: yes && counts.kids > 0 ? f.kita.value : "",
       phone: f.phone.value.trim()
     };
     var btn = $("rsvpSubmit"); btn.disabled = true; setStatus(st, "Sending…");
