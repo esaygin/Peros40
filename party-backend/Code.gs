@@ -10,6 +10,9 @@ var PHOTO_FOLDER_ID = '';
 // Optional: an email address to notify on each new RSVP. Leave empty for no emails.
 var NOTIFY_EMAIL = '';
 
+// Shown when you open the web app URL, to check which version Google is running.
+var SCRIPT_VERSION = 'nights-kita-1';
+
 var RSVP_HEADERS = ['Updated', 'Name', 'Coming', 'Adults', 'Kids', 'Total people', 'Kids ages', 'Hotel nights', 'Mobile', 'Kita'];
 var PHOTO_HEADERS = ['Received', 'From', 'File', 'Note', 'Link'];
 
@@ -29,7 +32,7 @@ function setup() {
 }
 
 function doGet() {
-  return json_({ ok: true, message: "Peros 40th backend is running." });
+  return json_({ ok: true, message: "Peros 40th backend is running.", version: SCRIPT_VERSION });
 }
 
 function doPost(e) {
