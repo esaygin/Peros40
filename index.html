@@ -245,6 +245,13 @@ fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 10px; min-width
 .rates div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding-block: 10px; border-bottom: 1px solid var(--line); }
 .rates dt { color: var(--ink); }
 .rates dd { margin: 0; font-family: var(--display); font-size: 1.4rem; color: var(--accent); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.menu { margin: 14px 0 0; display: grid; border-top: 1px solid var(--line); max-width: 52ch; }
+.menu div { display: grid; grid-template-columns: 90px minmax(0, 1fr); gap: 12px; padding-block: 10px; border-bottom: 1px solid var(--line); }
+.menu dt { font-size: 0.75rem; letter-spacing: var(--label-track); text-transform: uppercase; color: var(--accent); padding-top: 3px; }
+.menu dd { margin: 0; color: var(--ink); }
+.menu dd span { display: block; margin-top: 4px; color: var(--muted); font-size: 0.95rem; }
+.kita-book { display: grid; gap: 8px; }
+.contact { font-size: 1.05rem; overflow-wrap: anywhere; }
 .choices.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .features p { color: var(--muted); }
 .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
@@ -338,27 +345,33 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
         <h2>Dinner in the mountains</h2>
       </div>
       <div class="body">
-        <p class="prose">We're gathering at Stoos Lodge, a car-free mountain village above Lake Lucerne. The heart of the weekend is a birthday dinner on Saturday evening, followed by karaoke in the bunker. More of the programme will follow, and we'll update this page as plans come together.</p>
+        <p class="prose">We're gathering at Stoos Lodge, a car-free mountain village above Lake Lucerne. The heart of the weekend is a birthday dinner on Saturday evening, followed by karaoke in the bunker. We'll add the exact times here soon.</p>
         <ol class="schedule">
           <li>
             <div class="when">Fri 11 Dec<span>Optional</span></div>
-            <div><h3>Come early</h3><p>Make it a long weekend and arrive on Friday. The voucher works for every night you book.</p></div>
+            <div><h3>Come early</h3><p>Make it a long weekend and arrive on Friday. Check-in is from 15:30, and the voucher works for every night you book.</p></div>
           </li>
           <li>
             <div class="when">Sat 12 Dec<span>Afternoon</span></div>
-            <div><h3>Arrive and settle in</h3><p>Check in at Stoos Lodge, or come up just for the evening.</p></div>
+            <div><h3>Arrive and settle in</h3><p>Check-in at Stoos Lodge is from 15:30. Coming up just for the evening? Check the note on the last lift under <a href="#stay">Getting there</a>.</p></div>
           </li>
           <li>
             <div class="when">Sat 12 Dec<span>Evening</span></div>
-            <div><h3>Birthday dinner <span class="tbd">Time to follow</span></h3><p>Dinner for Peros at Stoos Lodge. We'll share the exact time and the arrival plan for the surprise closer to the date.</p></div>
+            <div><h3>Apéro and birthday dinner <span class="tbd">Time to follow</span></h3><p>Drinks, then a three-course dinner for Peros. The kids get their own table and kids' menu. We'll share the exact time and the plan for the surprise closer to the date.</p>
+              <dl class="menu">
+                <div><dt>Starter</dt><dd>Salad buffet</dd></div>
+                <div><dt>Main</dt><dd>Roast loin of lamb, pea purée, ratatouille, garlic jus<span>Vegetarian: smoked smashed potatoes from the Josper grill, broccoli aioli, sauce rouille</span></dd></div>
+                <div><dt>Dessert</dt><dd>Passion fruit three ways</dd></div>
+              </dl>
+            </div>
           </li>
           <li>
             <div class="when">Sat 12 Dec<span>After dinner</span></div>
-            <div><h3>Karaoke in the bunker</h3><p>The party moves down to the hotel's bunker for a karaoke night. Warm up your voice and pick your song.</p></div>
+            <div><h3>Karaoke in the bunker</h3><p>The party moves down to the hotel's bunker for a karaoke night, with a screen, microphones, speakers and mood lighting. Songs play from YouTube, so any song you can find works. A drinks buffet waits right outside the bunker. Warm up your voice and pick your song.</p></div>
           </li>
           <li>
             <div class="when">Sun 13 Dec<span>All day</span></div>
-            <div><h3>Mountain morning</h3><p>Breakfast together, snow, and the playground for the kids. Stay on longer if you like.</p></div>
+            <div><h3>Mountain morning</h3><p>Breakfast together, snow, and the fun park for the kids. Check-out is by 10:30, and you're welcome to stay on longer.</p></div>
           </li>
         </ol>
       </div>
@@ -388,7 +401,18 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
         <p class="note"><strong>Rooms aren't held for us.</strong> Booking is subject to availability, and December is ski season, so we recommend booking early.</p>
         <div class="prose">
           <p class="label">Getting there</p>
-          <p>Stoos is car-free. You leave the car at the valley station and ride up by funicular from Schwyz or by cable car from Morschach. The hotel's website has directions, parking and timetables.</p>
+          <p>Stoos Lodge, Stoosplatz 3, 6433 Stoos. Stoos is a car-free village at 1,300&nbsp;m, so the last part of the trip is by lift from the valley.</p>
+        </div>
+        <ul class="features">
+          <li><h3>Up the mountain</h3><p>The Stoosbahn, the world's steepest funicular, runs from Schwyz and stops right next to the hotel. The cable car from Morschach stops 500&nbsp;m from the hotel.</p></li>
+          <li><h3>Lift times</h3><p>Both lifts run from 07:10 to 19:40, leaving at 10 past and 20 to the hour. Arriving later in the evening? Check the timetable first.</p></li>
+          <li><h3>By car</h3><p>Take the A4 / E41 towards Schwyz – Altdorf. For the funicular, leave at Schwyz and follow the brown «Stoos» signs towards Muotathal. For the cable car, leave at Morschach and follow the brown «Stoos» signs after the Mositunnel. Both valley stations have paid parking.</p></li>
+          <li><h3>By train and bus</h3><p>For the funicular, take the train to Schwyz, then bus 1 to «Schwyz, Stoosbahn». For the cable car, take the train to Brunnen, then bus 4 to «Morschach, Luftseilbahn». Both lifts are right next to the bus stop.</p></li>
+        </ul>
+        <p class="note"><strong>Coming just for the evening?</strong> The regular lifts stop at 19:40, so there may be no way back down after the dinner and karaoke. Check the evening timetable before you travel, or stay the night with the voucher.</p>
+        <div class="prose">
+          <p class="label">Good to know</p>
+          <p>Check-in from 15:30, check-out by 10:30. Sauna and fitness aren't included in the room price. You can add them for CHF 12 per person per day, or fitness only for CHF 6, subject to availability.</p>
         </div>
         <div class="links">
           <a class="btn ghost" href="https://stoos-lodge.ch/" target="_blank" rel="noopener">Hotel website</a>
@@ -423,7 +447,10 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
             <div><dt>Full day, more than 4 hours</dt><dd>CHF 60</dd></div>
             <div><dt>Lunch</dt><dd>CHF 10</dd></div>
           </dl>
-          <p class="muted">The hotel asks for registration in advance so it can plan staff. Tell us in the RSVP form if you're interested and we'll pass the numbers on.</p>
+          <div class="kita-book">
+            <p class="muted">Please register in advance so the Kita can plan staff. Contact the Kita directly with each child's name and age and the times you'd like.</p>
+            <p class="contact"><a href="tel:+41418179970">041 817 99 70</a> · <a href="mailto:bergkita@stoos-hotels.ch">bergkita@stoos-hotels.ch</a></p>
+          </div>
         </div>
         <p class="muted">Rates for hotel guests, as quoted by the hotel. Other details are from the hotel's family page.</p>
         <div class="links">
@@ -490,7 +517,7 @@ footer .sig { font-family: var(--display); font-size: 1.8rem; color: var(--ink);
 
               <fieldset id="kitaField" hidden>
                 <legend>Interested in the hotel Kita?</legend>
-                <p class="hint">Daycare on Friday and Saturday, 08:00–18:00. <a href="#kids">Rates and details</a></p>
+                <p class="hint">Daycare on Friday and Saturday, 08:00–18:00. <a href="#kids">Rates and how to register</a></p>
                 <div class="choices four">
                   <label class="choice"><input type="radio" name="kita" value="No" id="kitaNo"><span>No, thanks</span></label>
                   <label class="choice"><input type="radio" name="kita" value="Maybe" id="kitaMaybe"><span>Maybe</span></label>
